@@ -39,11 +39,16 @@ app.innerHTML = `
 
   <div class="app">
 
+    <!-- HEADER -->
+
     <header class="header">
 
       <div class="logo">
+
         Viral
+
       </div>
+
 
       <div class="header-icons">
 
@@ -58,35 +63,129 @@ app.innerHTML = `
     </header>
 
 
-    <main class="feed">
+    <!-- RESPONSIVE LAYOUT -->
 
-      <div class="create-post">
-
-        <textarea
-          id="postInput"
-          placeholder="কি ভাবছেন?"
-        ></textarea>
+    <div class="layout">
 
 
-        <input
-          type="file"
-          id="imageInput"
-        />
+      <!-- LEFT SIDEBAR -->
+
+      <aside class="left-sidebar">
+
+        <button>🏠</button>
+
+        <button>🔥</button>
+
+        <button>🔔</button>
+
+        <button>💬</button>
+
+        <button>👤</button>
+
+      </aside>
 
 
-        <button id="postBtn">
+      <!-- FEED -->
 
-          পোস্ট করুন
-
-        </button>
-
-      </div>
+      <main class="feed">
 
 
-      <div id="feed"></div>
+        <!-- CREATE POST -->
 
-    </main>
+        <div class="create-post">
 
+          <textarea
+            id="postInput"
+            placeholder="কি ভাবছেন?"
+          ></textarea>
+
+
+          <input
+            type="file"
+            id="imageInput"
+          />
+
+
+          <button id="postBtn">
+
+            পোস্ট করুন
+
+          </button>
+
+        </div>
+
+
+        <!-- POSTS -->
+
+        <div id="feed"></div>
+
+      </main>
+
+
+      <!-- RIGHT SIDEBAR -->
+
+      <aside class="right-sidebar">
+
+
+        <div class="sidebar-card">
+
+          <h3>
+
+            🔥 Trending Creators
+
+          </h3>
+
+
+          <p>
+
+            Coming Soon
+
+          </p>
+
+        </div>
+
+
+        <div class="sidebar-card">
+
+          <h3>
+
+            💎 Creator Rank
+
+          </h3>
+
+
+          <p>
+
+            Weekly Rankings
+
+          </p>
+
+        </div>
+
+
+        <div class="sidebar-card">
+
+          <h3>
+
+            🚀 Viral Posts
+
+          </h3>
+
+
+          <p>
+
+            Top Trending Feed
+
+          </p>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+
+    <!-- MOBILE NAV -->
 
     <nav class="bottom-nav">
 
@@ -95,7 +194,9 @@ app.innerHTML = `
       <button>🔍</button>
 
       <button class="add-btn">
+
         ➕
+
       </button>
 
       <button>🔥</button>
@@ -154,11 +255,10 @@ watchAuthState(
         user.displayName;
 
 
-      // SYNC USER
-
       console.log(
-  "CALLING SYNC USER"
-);
+        "CALLING SYNC USER"
+      );
+
       await syncUser(user);
 
     }
@@ -180,7 +280,7 @@ watchAuthState(
 initFeed();
 
 
-// REALTIME
+// REALTIME FEED
 
 startRealtimeFeed({
 

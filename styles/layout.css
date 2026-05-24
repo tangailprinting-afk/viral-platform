@@ -1,62 +1,273 @@
 body{
+
   background:#0f0f0f;
+
   color:white;
+
   font-family:sans-serif;
+
+  overflow-x:hidden;
+
 }
+
 
 .app{
-  max-width:500px;
-  margin:auto;
+
   min-height:100vh;
-  position:relative;
+
 }
+
+
+/* ======================
+   HEADER
+====================== */
 
 .header{
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 15px;
-  border-bottom:1px solid #222;
+
   position:sticky;
+
   top:0;
-  background:#0f0f0f;
-  z-index:100;
+
+  z-index:1000;
+
+  height:65px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:0 16px;
+
+  background:rgba(15,15,15,.9);
+
+  backdrop-filter:blur(10px);
+
+  border-bottom:1px solid #222;
+
 }
+
 
 .logo{
+
   font-size:24px;
-  font-weight:bold;
+
+  font-weight:700;
+
 }
+
+
+/* ======================
+   MAIN LAYOUT
+====================== */
+
+.layout{
+
+  display:grid;
+
+  grid-template-columns:1fr;
+
+}
+
+
+/* ======================
+   SIDEBARS
+====================== */
+
+.left-sidebar,
+
+.right-sidebar{
+
+  display:none;
+
+}
+
+
+/* ======================
+   FEED
+====================== */
 
 .feed{
-  padding:15px;
-  padding-bottom:100px;
+
+  width:100%;
+
+  max-width:700px;
+
+  margin:auto;
+
+  padding:16px;
+
+  padding-bottom:120px;
+
 }
+
+
+/* ======================
+   MOBILE NAV
+====================== */
 
 .bottom-nav{
+
   position:fixed;
+
   bottom:0;
+
+  left:0;
+
   width:100%;
-  max-width:500px;
-  height:65px;
+
+  height:70px;
+
   background:#161616;
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-around;
+
   border-top:1px solid #222;
+
+  z-index:1000;
+
 }
+
 
 .bottom-nav button{
+
   background:none;
+
   border:none;
+
   color:white;
-  font-size:22px;
+
+  font-size:24px;
+
 }
 
+
 .add-btn{
-  width:50px;
-  height:50px;
+
+  width:55px;
+
+  height:55px;
+
   border-radius:50%;
+
   background:#ff004f !important;
+
+}
+
+
+/* ======================
+   TABLET
+====================== */
+
+@media(min-width:768px){
+
+  .layout{
+
+    grid-template-columns:
+
+      90px
+      1fr;
+
+  }
+
+
+  .left-sidebar{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding-top:30px;
+
+    border-right:1px solid #222;
+
+    min-height:calc(100vh - 65px);
+
+    position:sticky;
+
+    top:65px;
+
+  }
+
+
+  .feed{
+
+    max-width:800px;
+
+    padding:24px;
+
+  }
+
+
+  .bottom-nav{
+
+    display:none;
+
+  }
+
+}
+
+
+/* ======================
+   DESKTOP
+====================== */
+
+@media(min-width:1200px){
+
+  .layout{
+
+    grid-template-columns:
+
+      260px
+      minmax(500px,800px)
+      320px;
+
+    gap:20px;
+
+    max-width:1600px;
+
+    margin:auto;
+
+  }
+
+
+  .left-sidebar{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    padding:30px 20px;
+
+  }
+
+
+  .right-sidebar{
+
+    display:block;
+
+    padding:30px 20px;
+
+    border-left:1px solid #222;
+
+  }
+
+
+  .feed{
+
+    max-width:none;
+
+    padding:30px 0 120px;
+
+  }
+
 }

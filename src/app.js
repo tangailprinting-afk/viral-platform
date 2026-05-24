@@ -1,3 +1,8 @@
+import { openNotificationPanel }
+
+from "./notifications/notificationPanel.js";
+
+
 import { createPost }
 
 from "./posts/createPost.js";
@@ -76,7 +81,11 @@ app.innerHTML = `
 
         <button>🔥</button>
 
-        <button>🔔</button>
+        <button class="notification-btn">
+
+  🔔
+
+</button>
 
         <button>💬</button>
 
@@ -226,7 +235,27 @@ const feedContainer =
 
 const loginBtn =
   document.getElementById("loginBtn");
+const notificationBtn =
 
+  document.querySelector(
+    ".notification-btn"
+  );
+
+
+
+  // NOTIFICATIONS
+
+notificationBtn.addEventListener(
+
+  "click",
+
+  () => {
+
+    openNotificationPanel();
+
+  }
+
+);
 
 // LOGIN
 

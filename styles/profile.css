@@ -305,3 +305,46 @@
   padding:0 20px 100px;
 
 }
+
+/* ======================
+   FOLLOW BUTTON
+====================== */
+
+.follow-btn{
+
+  margin-top:20px;
+
+  height:52px;
+
+  min-width:170px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:
+
+  linear-gradient(
+
+    135deg,
+
+    #ff004f,
+
+    #ff00c8
+
+  );
+
+  color:white;
+
+  font-size:16px;
+
+  font-weight:700;
+
+}
+
+
+.follow-btn.following{
+
+  background:#2a2a2a;
+
+}

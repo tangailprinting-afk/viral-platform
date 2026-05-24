@@ -1,3 +1,12 @@
+import { startRealtimeNotifications }
+
+from "./notifications/realtimeNotifications.js";
+
+
+import { loadNotificationCount }
+
+from "./notifications/loadNotificationCount.js";
+
 import { openNotificationPanel }
 
 from "./notifications/notificationPanel.js";
@@ -93,9 +102,17 @@ app.innerHTML = `
         </button>
 
 
+        <!-- NOTIFICATION -->
+
         <button class="notification-btn">
 
           <i data-lucide="bell"></i>
+
+          <span class="notification-badge">
+
+            0
+
+          </span>
 
         </button>
 
@@ -243,9 +260,17 @@ app.innerHTML = `
       </button>
 
 
+      <!-- MOBILE NOTIFICATION -->
+
       <button class="notification-btn">
 
         <i data-lucide="bell"></i>
+
+        <span class="notification-badge">
+
+          0
+
+        </span>
 
       </button>
 
@@ -286,12 +311,21 @@ const loginBtn =
   document.getElementById("loginBtn");
 
 
-// ALL NOTIFICATION BUTTONS
+// NOTIFICATION BUTTONS
 
 const notificationButtons =
 
   document.querySelectorAll(
     ".notification-btn"
+  );
+
+
+// NOTIFICATION BADGES
+
+const notificationBadges =
+
+  document.querySelectorAll(
+    ".notification-badge"
   );
 
 
@@ -348,12 +382,83 @@ watchAuthState(
 
       await syncUser(user);
 
+
+// REALTIME NOTIFICATIONS
+
+startRealtimeNotifications({
+
+  firebaseUid:
+    user.uid,
+
+  onNewNotification: () => {
+
+    notificationBadges.forEach(badge => {
+
+      let current =
+
+        parseInt(
+          badge.innerText
+        );
+
+      if(isNaN(current)){
+
+        current = 0;
+
+      }
+
+
+      current++;
+
+
+      badge.innerText =
+
+        current > 9
+        ?
+        "9+"
+        :
+        current;
+
+    });
+
+  }
+
+});
+
+
+      // LOAD NOTIFICATION COUNT
+
+      const count =
+
+        await loadNotificationCount(
+          user.uid
+        );
+
+
+      notificationBadges.forEach(badge => {
+
+        badge.innerText =
+
+          count > 9
+          ?
+          "9+"
+          :
+          count;
+
+      });
+
     }
 
     else{
 
       loginBtn.innerText =
         "Login";
+
+
+      notificationBadges.forEach(badge => {
+
+        badge.innerText = "0";
+
+      });
 
     }
 

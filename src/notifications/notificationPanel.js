@@ -1,3 +1,8 @@
+import { markNotificationsRead }
+
+from "./markNotificationsRead.js";
+
+
 import { loadNotifications }
 
 from "./loadNotifications.js";
@@ -37,6 +42,14 @@ export async function openNotificationPanel(){
     return;
 
   }
+
+// MARK AS READ
+
+await markNotificationsRead(
+
+  currentUser.uid
+
+);
 
 
   // LOAD DATA
@@ -159,6 +172,20 @@ export async function openNotificationPanel(){
   document.body.appendChild(
     panel
   );
+
+// RESET BADGES
+
+document
+
+  .querySelectorAll(
+    ".notification-badge"
+  )
+
+  .forEach(badge => {
+
+    badge.innerText = "0";
+
+  });
 
 
   // CLOSE

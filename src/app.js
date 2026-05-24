@@ -2,7 +2,6 @@ import { startRealtimeNotifications }
 
 from "./notifications/realtimeNotifications.js";
 
-
 import { loadNotificationCount }
 
 from "./notifications/loadNotificationCount.js";
@@ -102,7 +101,7 @@ app.innerHTML = `
         </button>
 
 
-        <!-- NOTIFICATION -->
+        <!-- NOTIFICATIONS -->
 
         <button class="notification-btn">
 
@@ -329,6 +328,15 @@ const notificationBadges =
   );
 
 
+// FEED PAGINATION
+
+let feedOffset = 0;
+
+const FEED_LIMIT = 10;
+
+let loadingFeed = false;
+
+
 // NOTIFICATION EVENTS
 
 notificationButtons.forEach(btn => {
@@ -383,46 +391,46 @@ watchAuthState(
       await syncUser(user);
 
 
-// REALTIME NOTIFICATIONS
+      // REALTIME NOTIFICATIONS
 
-startRealtimeNotifications({
+      startRealtimeNotifications({
 
-  firebaseUid:
-    user.uid,
+        firebaseUid:
+          user.uid,
 
-  onNewNotification: () => {
+        onNewNotification: () => {
 
-    notificationBadges.forEach(badge => {
+          notificationBadges.forEach(badge => {
 
-      let current =
+            let current =
 
-        parseInt(
-          badge.innerText
-        );
+              parseInt(
+                badge.innerText
+              );
 
-      if(isNaN(current)){
+            if(isNaN(current)){
 
-        current = 0;
+              current = 0;
 
-      }
-
-
-      current++;
+            }
 
 
-      badge.innerText =
+            current++;
 
-        current > 9
-        ?
-        "9+"
-        :
-        current;
 
-    });
+            badge.innerText =
 
-  }
+              current > 9
+              ?
+              "9+"
+              :
+              current;
 
-});
+          });
+
+        }
+
+      });
 
 
       // LOAD NOTIFICATION COUNT
@@ -469,7 +477,7 @@ startRealtimeNotifications({
 
 // INITIAL FEED
 
-initFeed();
+initFeed(true);
 
 
 // REALTIME FEED
@@ -478,7 +486,7 @@ startRealtimeFeed({
 
   onNewPost: async () => {
 
-    await initFeed();
+    await initFeed(true);
 
   }
 
@@ -544,7 +552,7 @@ postBtn.addEventListener(
     imageInput.value = "";
 
 
-    await initFeed();
+    await initFeed(true);
 
   }
 
@@ -553,18 +561,93 @@ postBtn.addEventListener(
 
 // LOAD + RENDER FEED
 
-async function initFeed(){
+async function initFeed(
+
+  reset = false
+
+){
+
+  if(loadingFeed){
+
+    return;
+
+  }
+
+
+  loadingFeed = true;
+
+
+  if(reset){
+
+    feedOffset = 0;
+
+    feedContainer.innerHTML = "";
+
+  }
+
 
   const posts =
-    await loadFeed();
+
+    await loadFeed({
+
+      limit:FEED_LIMIT,
+
+      offset:feedOffset
+
+    });
+
 
   renderFeed({
 
     posts,
 
     container:
-      feedContainer
+      feedContainer,
+
+    append:true
 
   });
 
+
+  feedOffset += FEED_LIMIT;
+
+  loadingFeed = false;
+
 }
+
+
+// INFINITE SCROLL
+
+window.addEventListener(
+
+  "scroll",
+
+  async () => {
+
+    const scrollTop =
+      window.scrollY;
+
+    const windowHeight =
+      window.innerHeight;
+
+    const bodyHeight =
+      document.body.offsetHeight;
+
+
+    // LOAD MORE POSTS
+
+    if(
+
+      scrollTop + windowHeight
+      >=
+      bodyHeight - 400
+
+    ){
+
+      await initFeed();
+
+    }
+
+  }
+
+);

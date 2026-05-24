@@ -1,57 +1,69 @@
-.create-post{
-  background:#1a1a1a;
-  padding:15px;
-  border-radius:18px;
-  margin-bottom:20px;
+/* ======================
+   GLOBAL
+====================== */
+
+*{
+
+  margin:0;
+
+  padding:0;
+
+  box-sizing:border-box;
+
 }
 
-.create-post textarea{
-  width:100%;
-  min-height:100px;
-  background:#111;
-  border:none;
-  outline:none;
+
+body{
+
+  background:#0f0f0f;
+
   color:white;
-  padding:15px;
-  border-radius:12px;
-  resize:none;
+
+  font-family:sans-serif;
+
 }
 
-.create-post button{
-  margin-top:12px;
+
+/* ======================
+   LAYOUT
+====================== */
+
+.layout{
+
+  display:grid;
+
+  grid-template-columns:
+
+    90px
+    1fr
+    340px;
+
+  gap:20px;
+
+  max-width:1600px;
+
+  margin:auto;
+
+  padding:20px;
+
+}
+
+
+/* ======================
+   FEED
+====================== */
+
+.feed{
+
   width:100%;
-  height:45px;
-  border:none;
-  border-radius:12px;
-  background:#ff004f;
-  color:white;
+
 }
 
-.post-card{
-  background:#1a1a1a;
-  border-radius:18px;
-  padding-bottom:15px;
-}
 
-.post-top{
-    cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:15px;
-}
+/* ======================
+   SIDEBAR CARD
+====================== */
 
-.avatar{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#444;
-}
-
-.post-content{
-  padding:0 15px;
-}
 .sidebar-card{
 
   background:#1a1a1a;
@@ -74,6 +86,53 @@
 }
 
 
+/* ======================
+   SVG NAVIGATION
+====================== */
+
+.left-sidebar button,
+
+.bottom-nav button{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  transition:.2s;
+
+}
+
+
+.left-sidebar button:hover,
+
+.bottom-nav button:hover{
+
+  background:#242424;
+
+}
+
+
+/* ======================
+   LEFT SIDEBAR
+====================== */
+
+.left-sidebar{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+
+  position:sticky;
+
+  top:20px;
+
+}
+
+
 .left-sidebar button{
 
   width:60px;
@@ -88,180 +147,24 @@
 
   color:white;
 
-  font-size:24px;
-
-}
-/* ======================
-   POST CARD
-====================== */
-
-.post-card{
-
-  background:#161616;
-
-  border:1px solid #252525;
-
-  border-radius:24px;
-
-  margin-bottom:24px;
-
-  overflow:hidden;
-
-  transition:.25s;
-
-}
-
-
-.post-card:hover{
-
-  transform:translateY(-2px);
-
-  border-color:#3a3a3a;
-
 }
 
 
 /* ======================
-   POST TOP
+   SVG ICONS
 ====================== */
 
-.post-top{
+.left-sidebar svg,
 
-  display:flex;
+.bottom-nav svg,
 
-  align-items:center;
+.action-btn svg{
 
-  gap:14px;
+  width:24px;
 
-  padding:18px;
+  height:24px;
 
-  cursor:pointer;
-
-}
-
-
-.post-user h3{
-
-  font-size:17px;
-
-  font-weight:700;
-
-}
-
-
-.post-user span{
-
-  font-size:13px;
-
-  color:#ffcc00;
-
-}
-
-
-/* ======================
-   AVATAR
-====================== */
-
-.avatar{
-
-  width:52px;
-
-  height:52px;
-
-  border-radius:50%;
-
-  object-fit:cover;
-
-  border:2px solid #ff00c8;
-
-  box-shadow:
-
-    0 0 18px rgba(255,0,200,.45);
-
-}
-
-
-/* ======================
-   POST CONTENT
-====================== */
-
-.post-content{
-
-  padding:0 18px 18px;
-
-  font-size:16px;
-
-  line-height:1.7;
-
-  color:#f2f2f2;
-
-}
-
-
-/* ======================
-   POST IMAGE
-====================== */
-
-.post-image{
-
-  width:100%;
-
-  max-height:650px;
-
-  object-fit:cover;
-
-  background:#111;
-
-}
-
-
-/* ======================
-   ACTION BAR
-====================== */
-
-.post-actions{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-around;
-
-  padding:14px;
-
-  border-top:1px solid #252525;
-
-}
-
-
-.action-btn{
-
-  background:none;
-
-  border:none;
-
-  color:white;
-
-  font-size:15px;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  padding:10px 14px;
-
-  border-radius:14px;
-
-  transition:.2s;
-
-}
-
-
-.action-btn:hover{
-
-  background:#242424;
+  stroke-width:2.2;
 
 }
 
@@ -360,32 +263,280 @@
 
 
 /* ======================
-   MOBILE
+   POST CARD
 ====================== */
 
-@media(max-width:767px){
+.post-card{
 
-  .feed{
+  background:#161616;
 
-    padding:12px;
+  border:1px solid #252525;
 
-  }
+  border-radius:24px;
 
+  margin-bottom:24px;
 
-  .post-card{
+  overflow:hidden;
 
-    border-radius:18px;
-
-  }
-
-
-  .post-content{
-
-    font-size:15px;
-
-  }
+  transition:.25s;
 
 }
+
+
+.post-card:hover{
+
+  transform:translateY(-2px);
+
+  border-color:#3a3a3a;
+
+}
+
+
+/* ======================
+   POST TOP
+====================== */
+
+.post-top{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  padding:18px;
+
+  cursor:pointer;
+
+}
+
+
+/* ======================
+   AVATAR
+====================== */
+
+.avatar{
+
+  width:52px;
+
+  height:52px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  border:2px solid #ff00c8;
+
+  box-shadow:
+
+    0 0 18px rgba(255,0,200,.45);
+
+}
+
+
+/* ======================
+   USER INFO
+====================== */
+
+.post-user h3{
+
+  font-size:17px;
+
+  font-weight:700;
+
+}
+
+
+.post-user span{
+
+  font-size:13px;
+
+  color:#ffcc00;
+
+}
+
+
+/* ======================
+   POST CONTENT
+====================== */
+
+.post-content{
+
+  padding:0 18px 18px;
+
+  font-size:16px;
+
+  line-height:1.7;
+
+  color:#f2f2f2;
+
+}
+
+
+/* ======================
+   POST IMAGE
+====================== */
+
+.post-image{
+
+  width:100%;
+
+  max-height:650px;
+
+  object-fit:cover;
+
+  background:#111;
+
+  cursor:pointer;
+
+}
+
+
+/* ======================
+   ACTION BAR
+====================== */
+
+.post-actions{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-evenly;
+
+  padding:14px 18px;
+
+  border-top:1px solid #252525;
+
+  background:#141414;
+
+}
+
+
+/* ======================
+   ACTION BUTTON
+====================== */
+
+.action-btn{
+
+  width:52px;
+
+  height:52px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:transparent;
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  position:relative;
+
+  transition:.22s ease;
+
+  cursor:pointer;
+
+  overflow:hidden;
+
+}
+
+
+.action-btn:hover{
+
+  background:#242424;
+
+  transform:translateY(-2px);
+
+}
+
+
+.action-btn:active{
+
+  transform:scale(.94);
+
+}
+
+
+/* ======================
+   ICON COLORS
+====================== */
+
+.like-btn{
+
+  color:#ff4d7a;
+
+}
+
+
+.comment-btn{
+
+  color:#64a8ff;
+
+}
+
+
+.share-btn{
+
+  color:#4de38a;
+
+}
+
+
+.boost-btn{
+
+  color:#ffd84d;
+
+}
+
+
+/* ======================
+   LIKE COUNT
+====================== */
+
+.like-btn span{
+
+  position:absolute;
+
+  bottom:-2px;
+
+  right:-2px;
+
+  min-width:18px;
+
+  height:18px;
+
+  border-radius:999px;
+
+  background:#ff004f;
+
+  color:white;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:0 4px;
+
+  box-shadow:
+
+    0 0 14px rgba(255,0,79,.55);
+
+}
+
+
 /* ======================
    LIKE ANIMATION
 ====================== */
@@ -399,11 +550,21 @@
 
 .like-btn.liked{
 
-  transform:scale(1.2);
+  transform:scale(1.18);
 
-  color:#ff004f;
+  background:rgba(255,0,79,.12);
 
 }
+
+
+.like-btn.liked svg{
+
+  fill:#ff004f;
+
+  stroke:#ff004f;
+
+}
+
 
 /* ======================
    IMAGE VIEWER
@@ -460,7 +621,7 @@
 }
 
 
-/* CLOSE */
+/* CLOSE VIEWER */
 
 .close-viewer{
 
@@ -488,45 +649,6 @@
 
 }
 
-
-/* ANIMATIONS */
-
-@keyframes fadeIn{
-
-  from{
-
-    opacity:0;
-
-  }
-
-  to{
-
-    opacity:1;
-
-  }
-
-}
-
-
-@keyframes zoomIn{
-
-  from{
-
-    transform:scale(.92);
-
-    opacity:0;
-
-  }
-
-  to{
-
-    transform:scale(1);
-
-    opacity:1;
-
-  }
-
-}
 
 /* ======================
    COMMENT SHEET
@@ -556,10 +678,6 @@
 }
 
 
-/* ======================
-   CONTAINER
-====================== */
-
 .comment-container{
 
   position:absolute;
@@ -584,10 +702,6 @@
 
 }
 
-
-/* ======================
-   HEADER
-====================== */
 
 .comment-header{
 
@@ -629,10 +743,6 @@
 
 }
 
-
-/* ======================
-   COMMENT LIST
-====================== */
 
 .comment-list{
 
@@ -692,10 +802,6 @@
 
 }
 
-
-/* ======================
-   INPUT AREA
-====================== */
 
 .comment-input-area{
 
@@ -759,51 +865,6 @@
 
 
 /* ======================
-   ANIMATION
-====================== */
-
-@keyframes slideUp{
-
-  from{
-
-    transform:translateY(100%);
-
-  }
-
-  to{
-
-    transform:translateY(0);
-
-  }
-
-}
-
-
-/* ======================
-   DESKTOP
-====================== */
-
-@media(min-width:1024px){
-
-  .comment-container{
-
-    width:650px;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    border-radius:28px;
-
-    bottom:20px;
-
-    height:80vh;
-
-  }
-
-}
-
-/* ======================
    NOTIFICATION PANEL
 ====================== */
 
@@ -831,10 +892,6 @@
 }
 
 
-/* ======================
-   CONTAINER
-====================== */
-
 .notification-container{
 
   position:absolute;
@@ -861,10 +918,6 @@
 
 }
 
-
-/* ======================
-   HEADER
-====================== */
 
 .notification-header{
 
@@ -907,10 +960,6 @@
 }
 
 
-/* ======================
-   LIST
-====================== */
-
 .notification-list{
 
   flex:1;
@@ -921,10 +970,6 @@
 
 }
 
-
-/* ======================
-   ITEM
-====================== */
 
 .notification-item{
 
@@ -942,21 +987,8 @@
 
   margin-bottom:14px;
 
-  transition:.2s;
-
 }
 
-
-.notification-item:hover{
-
-  background:#202020;
-
-}
-
-
-/* ======================
-   AVATAR
-====================== */
 
 .notification-avatar{
 
@@ -972,10 +1004,6 @@
 
 }
 
-
-/* ======================
-   CONTENT
-====================== */
 
 .notification-content{
 
@@ -1005,72 +1033,6 @@
 
 }
 
-
-/* ======================
-   ANIMATION
-====================== */
-
-@keyframes slideNotification{
-
-  from{
-
-    transform:translateX(100%);
-
-  }
-
-  to{
-
-    transform:translateX(0);
-
-  }
-
-}
-
-
-/* ======================
-   MOBILE
-====================== */
-
-@media(max-width:767px){
-
-  .notification-container{
-
-    max-width:none;
-
-    width:100%;
-
-  }
-
-}
-
-/* ======================
-   SVG ICONS
-====================== */
-
-.left-sidebar button,
-
-.bottom-nav button{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-}
-
-
-.left-sidebar svg,
-
-.bottom-nav svg{
-
-  width:24px;
-
-  height:24px;
-
-  stroke-width:2.2;
-
-}
 
 /* ======================
    NOTIFICATION BADGE
@@ -1116,5 +1078,529 @@
   box-shadow:
 
     0 0 12px rgba(255,0,79,.6);
+
+}
+
+
+/* ======================
+   BOTTOM NAV
+====================== */
+
+.bottom-nav{
+
+  position:fixed;
+
+  bottom:0;
+
+  left:0;
+
+  width:100%;
+
+  height:74px;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:space-around;
+
+  backdrop-filter:blur(18px);
+
+  background:rgba(18,18,18,.92);
+
+  border-top:1px solid #252525;
+
+  z-index:9999;
+
+}
+
+
+.bottom-nav button{
+
+  width:56px;
+
+  height:56px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:transparent;
+
+  color:white;
+
+}
+
+
+/* ======================
+   ADD BUTTON
+====================== */
+
+.add-btn{
+
+  background:
+
+  linear-gradient(
+
+    135deg,
+
+    #ff004f,
+
+    #ff00c8
+
+  ) !important;
+
+  box-shadow:
+
+    0 0 18px rgba(255,0,200,.35);
+
+}
+
+
+.add-btn svg{
+
+  stroke:white;
+
+}
+
+
+/* ======================
+   ANIMATIONS
+====================== */
+
+@keyframes fadeIn{
+
+  from{
+
+    opacity:0;
+
+  }
+
+  to{
+
+    opacity:1;
+
+  }
+
+}
+
+
+@keyframes zoomIn{
+
+  from{
+
+    transform:scale(.92);
+
+    opacity:0;
+
+  }
+
+  to{
+
+    transform:scale(1);
+
+    opacity:1;
+
+  }
+
+}
+
+
+@keyframes slideUp{
+
+  from{
+
+    transform:translateY(100%);
+
+  }
+
+  to{
+
+    transform:translateY(0);
+
+  }
+
+}
+
+
+@keyframes slideNotification{
+
+  from{
+
+    transform:translateX(100%);
+
+  }
+
+  to{
+
+    transform:translateX(0);
+
+  }
+
+}
+
+
+/* ======================
+   DESKTOP
+====================== */
+
+@media(min-width:1024px){
+
+  .comment-container{
+
+    width:650px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border-radius:28px;
+
+    bottom:20px;
+
+    height:80vh;
+
+  }
+
+}
+
+
+/* ======================
+   MOBILE
+====================== */
+
+@media(max-width:767px){
+
+  .layout{
+
+    grid-template-columns:1fr;
+
+    padding:12px;
+
+  }
+
+
+  .left-sidebar{
+
+    display:none;
+
+  }
+
+
+  .right-sidebar{
+
+    display:none;
+
+  }
+
+
+  .bottom-nav{
+
+    display:flex;
+
+  }
+
+
+  .feed{
+
+    padding-bottom:90px;
+
+  }
+
+
+  .post-card{
+
+    border-radius:18px;
+
+  }
+
+
+  .post-content{
+
+    font-size:15px;
+
+  }
+
+
+  .notification-container{
+
+    max-width:none;
+
+    width:100%;
+
+  }
+
+
+  .action-btn{
+
+    width:48px;
+
+    height:48px;
+
+  }
+
+
+  .action-btn svg{
+
+    width:20px;
+
+    height:20px;
+
+  }
+
+
+  .notification-badge{
+
+    top:2px;
+
+    right:2px;
+
+  }
+
+}
+
+/* SHARE COUNT */
+
+.share-btn span{
+
+  position:absolute;
+
+  bottom:-2px;
+
+  right:-2px;
+
+  min-width:18px;
+
+  height:18px;
+
+  border-radius:999px;
+
+  background:#00c853;
+
+  color:white;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:0 4px;
+
+  box-shadow:
+
+    0 0 14px rgba(0,200,83,.5);
+
+}
+/* ======================
+   REPOST HEADER
+====================== */
+
+.repost-header{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:14px 18px;
+
+  font-size:13px;
+
+  color:#9ad1ff;
+
+  border-bottom:1px solid #252525;
+
+  background:#131313;
+
+}
+
+
+.repost-header svg{
+
+  width:18px;
+
+  height:18px;
+
+  stroke-width:2.3;
+
+}
+
+/* ======================
+   REACTION SUMMARY
+====================== */
+
+.reaction-summary{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:14px 18px;
+
+  border-top:1px solid #252525;
+
+  border-bottom:1px solid #252525;
+
+}
+
+
+.reaction-left{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+
+.reaction-icons{
+
+  display:flex;
+
+  align-items:center;
+
+}
+
+
+.reaction-icons span{
+
+  width:24px;
+
+  height:24px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  margin-left:-6px;
+
+  background:#1a1a1a;
+
+  border:2px solid #111;
+
+  font-size:13px;
+
+}
+
+
+.reaction-count{
+
+  font-size:14px;
+
+  color:#ccc;
+
+}
+
+
+.reaction-right{
+
+  display:flex;
+
+  gap:14px;
+
+  font-size:13px;
+
+  color:#888;
+
+}
+
+
+/* ======================
+   REACTION WRAPPER
+====================== */
+
+.reaction-wrapper{
+
+  position:relative;
+
+}
+
+
+/* ======================
+   REACTION POPUP
+====================== */
+
+.reaction-popup{
+
+  position:absolute;
+
+  bottom:62px;
+
+  left:0;
+
+  display:flex;
+
+  gap:8px;
+
+  padding:10px;
+
+  border-radius:999px;
+
+  background:#1a1a1a;
+
+  border:1px solid #2a2a2a;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transform:translateY(10px);
+
+  transition:.2s;
+
+}
+
+
+.reaction-wrapper:hover .reaction-popup{
+
+  opacity:1;
+
+  pointer-events:auto;
+
+  transform:translateY(0);
+
+}
+
+
+/* ======================
+   REACTION OPTION
+====================== */
+
+.reaction-option{
+
+  width:42px;
+
+  height:42px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#222;
+
+  font-size:22px;
+
+  transition:.18s;
+
+}
+
+
+.reaction-option:hover{
+
+  transform:scale(1.2);
 
 }

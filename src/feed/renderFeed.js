@@ -1,3 +1,16 @@
+import { reactToPost }
+
+from "../reactions/reactToPost.js";
+
+
+import { sharePost }
+
+from "../share/sharePost.js";
+
+import { updateShareCount }
+
+from "../share/updateShareCount.js";
+
 import { createNotification }
 
 from "../notifications/createNotification.js";
@@ -45,6 +58,29 @@ export function renderFeed({
 
 
     postElement.innerHTML = `
+
+
+${
+  post.reposted
+  ?
+  `
+    <div class="repost-header">
+
+      <i data-lucide="repeat-2"></i>
+
+      <span>
+
+        ${post.reposted_by}
+        reposted this
+
+      </span>
+
+    </div>
+  `
+  :
+  ""
+}
+
 
       <!-- POST TOP -->
 
@@ -120,67 +156,199 @@ export function renderFeed({
         ""
       }
 
+<!-- REACTION SUMMARY -->
 
-      <!-- ACTIONS -->
-
-      <div class="post-actions">
-
-
-        <!-- LIKE -->
-
-        <button
-          class="action-btn like-btn"
-        >
-
-          ❤️
-
-          <span>
-
-            ${
-              post.likes
-              ||
-              0
-            }
-
-          </span>
-
-        </button>
+<div class="reaction-summary">
 
 
-        <!-- COMMENT -->
+  <div class="reaction-left">
 
-        <button
-          class="action-btn comment-btn"
-        >
+    <div class="reaction-icons">
 
-          💬 Comment
+      <span>👍</span>
 
-        </button>
+      <span>❤️</span>
 
+      <span>😂</span>
 
-        <!-- BOOST -->
+      <span>😮</span>
 
-        <button
-          class="action-btn"
-        >
-
-          🚀 Boost
-
-        </button>
+    </div>
 
 
-        <!-- SAVE -->
+    <div class="reaction-count">
 
-        <button
-          class="action-btn"
-        >
+      ${
+        post.reactions_count
+        ||
+        0
+      }
 
-          🔖 Save
+    </div>
 
-        </button>
+  </div>
 
-      </div>
 
+  <div class="reaction-right">
+
+    <span>
+
+      ${
+        post.comments_count
+        ||
+        0
+      } comments
+
+    </span>
+
+
+    <span>
+
+      ${
+        post.shares_count
+        ||
+        0
+      } shares
+
+    </span>
+
+  </div>
+
+</div>
+
+
+<!-- ACTION BAR -->
+
+<div class="post-actions">
+
+
+  <!-- REACT -->
+
+  <div class="reaction-wrapper">
+
+
+    <button
+      class="action-btn react-btn"
+    >
+
+      <i data-lucide="heart"></i>
+
+    </button>
+
+
+    <!-- REACTION POPUP -->
+
+    <div class="reaction-popup">
+
+
+      <button
+        class="reaction-option"
+        data-reaction="like"
+      >
+
+        👍
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="love"
+      >
+
+        ❤️
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="haha"
+      >
+
+        😂
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="wow"
+      >
+
+        😮
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="sad"
+      >
+
+        😢
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="angry"
+      >
+
+        😡
+
+      </button>
+
+
+      <button
+        class="reaction-option"
+        data-reaction="fire"
+      >
+
+        🔥
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- COMMENT -->
+
+  <button
+    class="action-btn comment-btn"
+  >
+
+    <i data-lucide="message-circle"></i>
+
+  </button>
+
+
+  <!-- SHARE -->
+
+  <button
+    class="action-btn share-btn"
+  >
+
+    <i data-lucide="send"></i>
+
+  </button>
+
+
+  <!-- BOOST -->
+
+  <button
+    class="action-btn boost-btn"
+  >
+
+    <i data-lucide="zap"></i>
+
+  </button>
+
+</div>
+  
     `;
 
 
@@ -216,6 +384,49 @@ export function renderFeed({
       }
 
     );
+
+// REACTION SYSTEM
+
+const reactionOptions =
+
+  postElement.querySelectorAll(
+    ".reaction-option"
+  );
+
+
+reactionOptions.forEach(option => {
+
+  option.addEventListener(
+
+    "click",
+
+    async () => {
+
+      const reactionType =
+
+        option.dataset.reaction;
+
+
+      const result =
+
+        await reactToPost({
+
+          postId:
+            post.id,
+
+          reactionType
+
+        });
+
+
+      console.log(result);
+
+    }
+
+  );
+
+});
+
 
 
     // COMMENT BUTTON
@@ -349,6 +560,95 @@ export function renderFeed({
 
     );
 
+// SHARE BUTTON
+
+const shareBtn =
+
+  postElement.querySelector(
+    ".share-btn"
+  );
+
+
+shareBtn.addEventListener(
+
+  "click",
+
+  async () => {
+
+    const result =
+
+      await sharePost(
+        post.id
+      );
+
+
+    if(result === "already_shared"){
+
+      alert(
+        "Already Shared"
+      );
+
+      return;
+
+    }
+
+
+    if(result === "shared"){
+
+      const shareCount =
+
+        parseInt(
+
+          shareBtn.querySelector(
+            "span"
+          ).innerText
+
+        );
+
+
+      const newShares =
+
+        await updateShareCount(
+
+          post.id,
+
+          shareCount
+
+        );
+
+
+      if(newShares !== false){
+
+        shareBtn.querySelector(
+          "span"
+        ).innerText = newShares;
+
+
+        // SHARE ANIMATION
+
+        shareBtn.classList.add(
+          "liked"
+        );
+
+
+        setTimeout(() => {
+
+          shareBtn.classList.remove(
+            "liked"
+          );
+
+        },300);
+
+      }
+
+    }
+
+  }
+
+);
+
+
+
 
     // IMAGE VIEWER
 
@@ -377,6 +677,9 @@ export function renderFeed({
 
     }
 
+// RENDER SVG ICONS
+
+lucide.createIcons();
 
     // APPEND
 

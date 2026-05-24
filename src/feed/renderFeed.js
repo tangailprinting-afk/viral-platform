@@ -1,3 +1,8 @@
+import { likePost }
+
+from "../reactions/likes.js";
+
+
 import { openProfile }
 
 from "../users/profile.js";
@@ -103,38 +108,51 @@ export function renderFeed({
 
       <!-- ACTIONS -->
 
-      <div class="post-actions">
+<!-- ACTIONS -->
+
+<div class="post-actions">
 
 
-        <button class="action-btn">
+  <button
+    class="action-btn like-btn"
+  >
 
-          ❤️ Like
+    ❤️
 
-        </button>
+    <span>
 
+      ${
+        post.likes
+        ||
+        0
+      }
 
-        <button class="action-btn">
+    </span>
 
-          💬 Comment
-
-        </button>
-
-
-        <button class="action-btn">
-
-          🚀 Boost
-
-        </button>
+  </button>
 
 
-        <button class="action-btn">
+  <button class="action-btn">
 
-          🔖 Save
+    💬 Comment
 
-        </button>
+  </button>
 
-      </div>
 
+  <button class="action-btn">
+
+    🚀 Boost
+
+  </button>
+
+
+  <button class="action-btn">
+
+    🔖 Save
+
+  </button>
+
+</div>
     `;
 
 
@@ -171,6 +189,73 @@ export function renderFeed({
 
     );
 
+
+
+
+// LIKE BUTTON
+
+const likeBtn =
+
+  postElement.querySelector(
+    ".like-btn"
+  );
+
+
+likeBtn.addEventListener(
+
+  "click",
+
+  async () => {
+
+    const likeCount =
+
+      parseInt(
+
+        likeBtn.querySelector(
+          "span"
+        ).innerText
+
+      );
+
+
+    const newLikes =
+
+      await likePost(
+
+        post.id,
+
+        likeCount
+
+      );
+
+
+    if(newLikes !== false){
+
+      likeBtn.querySelector(
+        "span"
+      ).innerText = newLikes;
+
+
+      // ANIMATION
+
+      likeBtn.classList.add(
+        "liked"
+      );
+
+
+      setTimeout(() => {
+
+        likeBtn.classList.remove(
+          "liked"
+        );
+
+      },300);
+
+    }
+
+  }
+
+);
 
     container.appendChild(
       postElement

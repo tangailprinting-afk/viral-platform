@@ -386,3 +386,21 @@
   }
 
 }
+/* ======================
+   LIKE ANIMATION
+====================== */
+
+.like-btn{
+
+  transition:.2s;
+
+}
+
+
+.like-btn.liked{
+
+  transform:scale(1.2);
+
+  color:#ff004f;
+
+}

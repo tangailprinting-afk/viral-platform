@@ -594,6 +594,49 @@ const previewComments =
 
           console.log(result);
 
+// CREATE REACTION NOTIFICATION
+
+const currentUser =
+  getCurrentUser();
+
+
+if(
+
+  currentUser
+  &&
+  currentUser.uid !==
+  post.firebase_uid
+
+){
+
+  await createNotification({
+
+    receiverUid:
+      post.firebase_uid,
+
+    senderUid:
+      currentUser.uid,
+
+    senderName:
+      currentUser.displayName,
+
+    senderAvatar:
+      currentUser.photoURL,
+
+    type:
+      "reaction",
+
+    postId:
+      post.id,
+
+    message:
+      `reacted with ${reactionEmojiMap[reactionType]}`
+
+  });
+
+}
+
+
 
           // SIMPLE LIVE UPDATE
 

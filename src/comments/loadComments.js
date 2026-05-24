@@ -11,9 +11,15 @@ export async function loadComments(
 
   try{
 
-    const { data,error }
+    const {
 
-      = await supabaseClient
+      data:comments,
+
+      error
+
+    }
+
+    = await supabaseClient
 
       .from("comments")
 
@@ -49,7 +55,39 @@ export async function loadComments(
     }
 
 
-    return data || [];
+    // MAIN COMMENTS
+
+    const mainComments =
+
+      comments.filter(
+
+        comment =>
+
+          !comment.parent_comment_id
+
+      );
+
+
+    // ATTACH REPLIES
+
+    mainComments.forEach(comment => {
+
+      comment.replies =
+
+        comments.filter(
+
+          reply =>
+
+            reply.parent_comment_id
+            ===
+            comment.id
+
+        );
+
+    });
+
+
+    return mainComments;
 
   }
 

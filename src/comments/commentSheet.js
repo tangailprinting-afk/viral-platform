@@ -1,3 +1,18 @@
+import { reactToComment }
+
+from "./reactToComment.js";
+
+import { replyToComment }
+
+from "./replyToComment.js";
+
+import { createNotification }
+
+from "../notifications/createNotification.js";
+
+import { getCurrentUser }
+
+from "../auth/session.js";
 
 import { startRealtimeComments }
 
@@ -14,9 +29,12 @@ from "./loadComments.js";
 
 export async function openCommentSheet({
 
-  postId
+  postId,
+
+  postOwnerUid = null
 
 }){
+
 
   // REMOVE OLD SHEET
 
@@ -25,6 +43,7 @@ export async function openCommentSheet({
     document.getElementById(
       "commentSheet"
     );
+
 
   if(oldSheet){
 
@@ -55,6 +74,8 @@ export async function openCommentSheet({
   sheet.className =
     "comment-sheet";
 
+
+  // HTML
 
   sheet.innerHTML = `
 
@@ -96,6 +117,8 @@ export async function openCommentSheet({
             <div class="comment-item">
 
 
+              <!-- AVATAR -->
+
               <img
 
                 class="comment-avatar"
@@ -103,13 +126,16 @@ export async function openCommentSheet({
                 src="${
                   comment.avatar
                   ||
-                  'https://placehold.co/100'
+                  "https://placehold.co/100"
                 }"
 
               />
 
 
+              <!-- BODY -->
+
               <div class="comment-body">
+
 
                 <strong>
 
@@ -129,6 +155,186 @@ export async function openCommentSheet({
                   }
 
                 </p>
+
+<!-- COMMENT REACTIONS -->
+
+<div class="comment-reactions">
+
+
+  <button
+
+    class="comment-react-btn"
+
+    data-comment-id="${
+      comment.id
+    }"
+
+  >
+
+    ❤️
+
+  </button>
+
+
+  <button
+
+    class="comment-react-btn"
+
+    data-comment-id="${
+      comment.id
+    }"
+
+  >
+
+    😂
+
+  </button>
+
+
+  <button
+
+    class="comment-react-btn"
+
+    data-comment-id="${
+      comment.id
+    }"
+
+  >
+
+    😮
+
+  </button>
+
+
+  <button
+
+    class="comment-react-btn"
+
+    data-comment-id="${
+      comment.id
+    }"
+
+  >
+
+    🔥
+
+  </button>
+
+</div>
+
+
+                <!-- REPLY BUTTON -->
+
+                <button
+
+                  class="reply-btn"
+
+                  data-comment-id="${
+                    comment.id
+                  }"
+
+                >
+
+                  Reply
+
+                </button>
+
+
+                <!-- REPLY INPUT -->
+
+                <div
+
+                  class="reply-input-box"
+
+                  id="reply-box-${
+                    comment.id
+                  }"
+
+                >
+
+
+                  <input
+
+                    type="text"
+
+                    class="reply-input"
+
+                    placeholder="Write reply..."
+
+                  />
+
+
+                  <button
+
+                    class="send-reply"
+
+                    data-comment-id="${
+                      comment.id
+                    }"
+
+                  >
+
+                    Send
+
+                  </button>
+
+                </div>
+
+
+                <!-- REPLIES -->
+
+                <div class="reply-list">
+
+                  ${
+                    comment.replies
+
+                    ?.map(reply => `
+
+                      <div class="reply-item">
+
+
+                        <img
+
+                          class="reply-avatar"
+
+                          src="${
+                            reply.avatar
+                            ||
+                            "https://placehold.co/100"
+                          }"
+
+                        />
+
+
+                        <div class="reply-body">
+
+                          <strong>
+
+                            ${
+                              reply.username
+                            }
+
+                          </strong>
+
+
+                          <p>
+
+                            ${
+                              reply.content
+                            }
+
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    `)
+
+                    .join("")
+                  }
+
+                </div>
 
               </div>
 
@@ -171,31 +377,32 @@ export async function openCommentSheet({
   `;
 
 
+  // APPEND
+
   document.body.appendChild(
     sheet
   );
 
 
-// REALTIME COMMENTS
+  // REALTIME COMMENTS
 
-startRealtimeComments({
+  startRealtimeComments({
 
-  postId,
+    postId,
 
-  onNewComment: () => {
+    onNewComment: () => {
 
-    openCommentSheet({
+      openCommentSheet({
 
-      postId
+        postId,
 
-    });
+        postOwnerUid
 
-  }
+      });
 
-});
+    }
 
-
-
+  });
 
 
   // CLOSE
@@ -217,6 +424,256 @@ startRealtimeComments({
       }
 
     );
+
+
+
+// COMMENT REACTIONS
+
+const commentReactionButtons =
+
+  sheet.querySelectorAll(
+    ".comment-react-btn"
+  );
+
+
+commentReactionButtons.forEach(btn => {
+
+  btn.addEventListener(
+
+    "click",
+
+    async () => {
+
+      const commentId =
+
+        btn.dataset.commentId;
+
+
+      const reactionType =
+
+        btn.innerText;
+
+
+      const reactionMap = {
+
+        "❤️":"love",
+
+        "😂":"haha",
+
+        "😮":"wow",
+
+        "🔥":"fire"
+
+      };
+
+
+      const result =
+
+        await reactToComment({
+
+          commentId,
+
+          reactionType:
+            reactionMap[
+              reactionType
+            ]
+
+        });
+
+
+      console.log(result);
+
+
+      // SIMPLE ANIMATION
+
+      btn.classList.add(
+        "active"
+      );
+
+
+      setTimeout(() => {
+
+        btn.classList.remove(
+          "active"
+        );
+
+      },300);
+
+    }
+
+  );
+
+});
+
+
+
+  // REPLY BUTTONS
+
+  const replyButtons =
+
+    sheet.querySelectorAll(
+      ".reply-btn"
+    );
+
+
+  replyButtons.forEach(btn => {
+
+    btn.addEventListener(
+
+      "click",
+
+      () => {
+
+        const commentId =
+
+          btn.dataset.commentId;
+
+
+        const replyBox =
+
+          document.getElementById(
+
+            `reply-box-${commentId}`
+
+          );
+
+
+        replyBox.classList.toggle(
+          "active"
+        );
+
+      }
+
+    );
+
+  });
+
+
+  // SEND REPLY
+
+  const sendReplyButtons =
+
+    sheet.querySelectorAll(
+      ".send-reply"
+    );
+
+
+  sendReplyButtons.forEach(btn => {
+
+    btn.addEventListener(
+
+      "click",
+
+      async () => {
+
+        const commentId =
+
+          btn.dataset.commentId;
+
+
+        const replyBox =
+
+          document.getElementById(
+
+            `reply-box-${commentId}`
+
+          );
+
+
+        const input =
+
+          replyBox.querySelector(
+            ".reply-input"
+          );
+
+
+        const text =
+          input.value.trim();
+
+
+        if(!text){
+
+          return;
+
+        }
+
+
+        const success =
+
+          await replyToComment({
+
+            postId,
+
+            parentCommentId:
+              commentId,
+
+            text
+
+          });
+
+
+        if(success){
+
+
+          // REPLY NOTIFICATION
+
+          const currentUser =
+            getCurrentUser();
+
+
+          if(
+
+            currentUser
+            &&
+            postOwnerUid
+            &&
+            currentUser.uid !==
+            postOwnerUid
+
+          ){
+
+            await createNotification({
+
+              receiverUid:
+                postOwnerUid,
+
+              senderUid:
+                currentUser.uid,
+
+              senderName:
+                currentUser.displayName,
+
+              senderAvatar:
+                currentUser.photoURL,
+
+              type:
+                "reply",
+
+              postId,
+
+              message:
+                "replied to a comment 💬"
+
+            });
+
+          }
+
+
+          openCommentSheet({
+
+            postId,
+
+            postOwnerUid
+
+          });
+
+        }
+
+      }
+
+    );
+
+  });
 
 
   // SEND COMMENT
@@ -242,8 +699,27 @@ startRealtimeComments({
     async () => {
 
       const text =
-        input.value;
+        input.value.trim();
 
+
+      // EMPTY BLOCK
+
+      if(!text){
+
+        return;
+
+      }
+
+
+      // DISABLE BUTTON
+
+      sendBtn.disabled = true;
+
+      sendBtn.innerText =
+        "...";
+
+
+      // ADD COMMENT
 
       const success =
 
@@ -256,11 +732,75 @@ startRealtimeComments({
         });
 
 
+      // ENABLE BUTTON
+
+      sendBtn.disabled = false;
+
+      sendBtn.innerText =
+        "Send";
+
+
+      // SUCCESS
+
       if(success){
+
+
+        // COMMENT NOTIFICATION
+
+        const currentUser =
+          getCurrentUser();
+
+
+        if(
+
+          currentUser
+          &&
+          postOwnerUid
+          &&
+          currentUser.uid !==
+          postOwnerUid
+
+        ){
+
+          await createNotification({
+
+            receiverUid:
+              postOwnerUid,
+
+            senderUid:
+              currentUser.uid,
+
+            senderName:
+              currentUser.displayName,
+
+            senderAvatar:
+              currentUser.photoURL,
+
+            type:
+              "comment",
+
+            postId,
+
+            message:
+              "commented on your post 💬"
+
+          });
+
+        }
+
+
+        // CLEAR INPUT
+
+        input.value = "";
+
+
+        // RELOAD
 
         openCommentSheet({
 
-          postId
+          postId,
+
+          postOwnerUid
 
         });
 

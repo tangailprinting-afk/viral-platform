@@ -66,9 +66,8 @@ export async function addComment({
 
           avatar:
             currentUser.photoURL,
-
-          comment:
-            text
+content:
+  text
 
         }
 

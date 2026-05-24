@@ -120,7 +120,7 @@ export async function openCommentSheet({
                 <p>
 
                   ${
-                    comment.comment
+                    comment.content
                   }
 
                 </p>

@@ -1,7 +1,18 @@
+import { loadPreviewComments }
+
+from "../comments/loadPreviewComments.js";
+
+import { loadPostReactions }
+
+from "../reactions/loadPostReactions.js";
+
+import { buildReactionSummary }
+
+from "../reactions/buildReactionSummary.js";
+
 import { reactToPost }
 
 from "../reactions/reactToPost.js";
-
 
 import { sharePost }
 
@@ -27,27 +38,112 @@ import { openImageViewer }
 
 from "../images/imageViewer.js";
 
-import { likePost }
-
-from "../reactions/likes.js";
-
 import { openProfile }
 
 from "../users/profile.js";
 
 
-export function renderFeed({
+export async function renderFeed({
 
   posts,
 
-  container
+  container,
+
+  append = false
 
 }){
 
-  container.innerHTML = "";
+  if(!append){
+
+    container.innerHTML = "";
+
+  }
 
 
-  posts.forEach(post => {
+  for(const post of posts){
+
+
+    // LOAD REACTIONS
+
+    const reactions =
+
+      await loadPostReactions(
+        post.id
+      );
+
+
+    // BUILD SUMMARY
+
+    const reactionSummary =
+
+      buildReactionSummary(
+        reactions
+      );
+
+
+    // REACTION MAP
+
+    const reactionEmojiMap = {
+
+      like:"👍",
+
+      love:"❤️",
+
+      haha:"😂",
+
+      wow:"😮",
+
+      sad:"😢",
+
+      angry:"😡",
+
+      fire:"🔥"
+
+    };
+
+
+    // TOP REACTIONS
+
+    const topReactionIcons =
+
+      reactionSummary.topReactions
+
+      .map(type =>
+
+        `<span>${
+          reactionEmojiMap[type]
+        }</span>`
+
+      )
+
+      .join("");
+
+
+    // WHO REACTED
+
+    const whoReacted =
+
+      reactions
+
+      .slice(0,2)
+
+      .map(r => r.username)
+
+      .join(", ");
+
+
+
+
+// LOAD COMMENT PREVIEW
+
+const previewComments =
+
+  await loadPreviewComments(
+    post.id
+  );
+
+
+    // CREATE POST ELEMENT
 
     const postElement =
       document.createElement("div");
@@ -57,29 +153,30 @@ export function renderFeed({
       "post-card";
 
 
+    // HTML
+
     postElement.innerHTML = `
 
+      ${
+        post.reposted
+        ?
+        `
+          <div class="repost-header">
 
-${
-  post.reposted
-  ?
-  `
-    <div class="repost-header">
+            <i data-lucide="repeat-2"></i>
 
-      <i data-lucide="repeat-2"></i>
+            <span>
 
-      <span>
+              ${post.reposted_by}
+              reposted this
 
-        ${post.reposted_by}
-        reposted this
+            </span>
 
-      </span>
-
-    </div>
-  `
-  :
-  ""
-}
+          </div>
+        `
+        :
+        ""
+      }
 
 
       <!-- POST TOP -->
@@ -156,199 +253,267 @@ ${
         ""
       }
 
-<!-- REACTION SUMMARY -->
 
-<div class="reaction-summary">
+      <!-- REACTION SUMMARY -->
 
-
-  <div class="reaction-left">
-
-    <div class="reaction-icons">
-
-      <span>👍</span>
-
-      <span>❤️</span>
-
-      <span>😂</span>
-
-      <span>😮</span>
-
-    </div>
+      <div class="reaction-summary">
 
 
-    <div class="reaction-count">
-
-      ${
-        post.reactions_count
-        ||
-        0
-      }
-
-    </div>
-
-  </div>
+        <div class="reaction-left">
 
 
-  <div class="reaction-right">
+          <div class="reaction-icons">
 
-    <span>
+            ${
+              topReactionIcons
+              ||
+              ""
+            }
 
-      ${
-        post.comments_count
-        ||
-        0
-      } comments
-
-    </span>
+          </div>
 
 
-    <span>
+          <div class="reaction-count">
 
-      ${
-        post.shares_count
-        ||
-        0
-      } shares
+            ${
+              reactionSummary.total
+            }
 
-    </span>
+          </div>
 
-  </div>
+
+          <div class="who-reacted">
+
+            ${
+              whoReacted
+              ||
+              "No reactions yet"
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="reaction-right">
+
+          <span>
+
+            ${
+              post.comments_count
+              ||
+              0
+            } comments
+
+          </span>
+
+
+          <span>
+
+            ${
+              post.shares_count
+              ||
+              0
+            } shares
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+<!-- COMMENT PREVIEW -->
+
+<div class="comment-preview-list">
+
+  ${
+    previewComments
+
+    .map(comment => `
+
+      <div class="preview-comment">
+
+
+        <img
+
+          class="preview-avatar"
+
+          src="${
+            comment.avatar
+            ||
+            "https://placehold.co/100"
+          }"
+
+        />
+
+
+        <div class="preview-body">
+
+          <strong>
+
+            ${
+              comment.username
+            }
+
+          </strong>
+
+
+          <p>
+
+            ${
+              comment.content
+            }
+
+          </p>
+
+        </div>
+
+      </div>
+
+    `)
+
+    .join("")
+
+  }
 
 </div>
 
 
-<!-- ACTION BAR -->
 
-<div class="post-actions">
+      <!-- ACTION BAR -->
 
-
-  <!-- REACT -->
-
-  <div class="reaction-wrapper">
+      <div class="post-actions">
 
 
-    <button
-      class="action-btn react-btn"
-    >
+        <!-- REACTION -->
 
-      <i data-lucide="heart"></i>
-
-    </button>
+        <div class="reaction-wrapper">
 
 
-    <!-- REACTION POPUP -->
+          <button
+            class="action-btn react-btn"
+          >
 
-    <div class="reaction-popup">
+            <i data-lucide="heart"></i>
 
-
-      <button
-        class="reaction-option"
-        data-reaction="like"
-      >
-
-        👍
-
-      </button>
+          </button>
 
 
-      <button
-        class="reaction-option"
-        data-reaction="love"
-      >
+          <!-- POPUP -->
 
-        ❤️
-
-      </button>
+          <div class="reaction-popup">
 
 
-      <button
-        class="reaction-option"
-        data-reaction="haha"
-      >
+            <button
+              class="reaction-option"
+              data-reaction="like"
+            >
 
-        😂
+              👍
 
-      </button>
-
-
-      <button
-        class="reaction-option"
-        data-reaction="wow"
-      >
-
-        😮
-
-      </button>
+            </button>
 
 
-      <button
-        class="reaction-option"
-        data-reaction="sad"
-      >
+            <button
+              class="reaction-option"
+              data-reaction="love"
+            >
 
-        😢
+              ❤️
 
-      </button>
-
-
-      <button
-        class="reaction-option"
-        data-reaction="angry"
-      >
-
-        😡
-
-      </button>
+            </button>
 
 
-      <button
-        class="reaction-option"
-        data-reaction="fire"
-      >
+            <button
+              class="reaction-option"
+              data-reaction="haha"
+            >
 
-        🔥
+              😂
 
-      </button>
-
-    </div>
-
-  </div>
+            </button>
 
 
-  <!-- COMMENT -->
+            <button
+              class="reaction-option"
+              data-reaction="wow"
+            >
 
-  <button
-    class="action-btn comment-btn"
-  >
+              😮
 
-    <i data-lucide="message-circle"></i>
-
-  </button>
-
-
-  <!-- SHARE -->
-
-  <button
-    class="action-btn share-btn"
-  >
-
-    <i data-lucide="send"></i>
-
-  </button>
+            </button>
 
 
-  <!-- BOOST -->
+            <button
+              class="reaction-option"
+              data-reaction="sad"
+            >
 
-  <button
-    class="action-btn boost-btn"
-  >
+              😢
 
-    <i data-lucide="zap"></i>
+            </button>
 
-  </button>
 
-</div>
-  
+            <button
+              class="reaction-option"
+              data-reaction="angry"
+            >
+
+              😡
+
+            </button>
+
+
+            <button
+              class="reaction-option"
+              data-reaction="fire"
+            >
+
+              🔥
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- COMMENT -->
+
+        <button
+          class="action-btn comment-btn"
+        >
+
+          <i data-lucide="message-circle"></i>
+
+        </button>
+
+
+        <!-- SHARE -->
+
+        <button
+          class="action-btn share-btn"
+        >
+
+          <i data-lucide="send"></i>
+
+        </button>
+
+
+        <!-- BOOST -->
+
+        <button
+          class="action-btn boost-btn"
+        >
+
+          <i data-lucide="zap"></i>
+
+        </button>
+
+      </div>
+
     `;
 
 
@@ -361,72 +526,113 @@ ${
       );
 
 
-    topSection.addEventListener(
+    if(topSection){
 
-      "click",
+      topSection.addEventListener(
 
-      () => {
+        "click",
 
-        openProfile({
+        () => {
 
-          user:{
+          openProfile({
 
-            username:
-              post.username,
+            user:{
 
-            avatar:
-              post.avatar
+              username:
+                post.username,
 
-          }
+              avatar:
+                post.avatar,
 
-        });
+              firebase_uid:
+                post.firebase_uid
 
-      }
+            }
 
-    );
+          });
 
-// REACTION SYSTEM
+        }
 
-const reactionOptions =
-
-  postElement.querySelectorAll(
-    ".reaction-option"
-  );
-
-
-reactionOptions.forEach(option => {
-
-  option.addEventListener(
-
-    "click",
-
-    async () => {
-
-      const reactionType =
-
-        option.dataset.reaction;
-
-
-      const result =
-
-        await reactToPost({
-
-          postId:
-            post.id,
-
-          reactionType
-
-        });
-
-
-      console.log(result);
+      );
 
     }
 
-  );
 
-});
+    // REACTION SYSTEM
 
+    const reactionOptions =
+
+      postElement.querySelectorAll(
+        ".reaction-option"
+      );
+
+
+    reactionOptions.forEach(option => {
+
+      option.addEventListener(
+
+        "click",
+
+        async () => {
+
+          const reactionType =
+
+            option.dataset.reaction;
+
+
+          const result =
+
+            await reactToPost({
+
+              postId:
+                post.id,
+
+              reactionType
+
+            });
+
+
+          console.log(result);
+
+
+          // SIMPLE LIVE UPDATE
+
+          const reactionCountEl =
+
+            postElement.querySelector(
+              ".reaction-count"
+            );
+
+
+          let currentCount =
+
+            parseInt(
+              reactionCountEl.innerText
+            ) || 0;
+
+
+          if(result?.added){
+
+            currentCount++;
+
+          }
+
+
+          if(result?.removed){
+
+            currentCount--;
+
+          }
+
+
+          reactionCountEl.innerText =
+            currentCount;
+
+        }
+
+      );
+
+    });
 
 
     // COMMENT BUTTON
@@ -438,216 +644,164 @@ reactionOptions.forEach(option => {
       );
 
 
-    commentBtn.addEventListener(
+    if(commentBtn){
 
-      "click",
+      commentBtn.addEventListener(
 
-      () => {
+        "click",
 
-        openCommentSheet({
+        () => {
 
-          postId:
-            post.id
+          openCommentSheet({
 
-        });
+            postId:
+              post.id
 
-      }
+          });
 
-    );
+        }
+
+      );
+
+    }
 
 
-    // LIKE BUTTON
+    // SHARE BUTTON
 
-    const likeBtn =
+    const shareBtn =
 
       postElement.querySelector(
-        ".like-btn"
+        ".share-btn"
       );
 
 
-    likeBtn.addEventListener(
+    if(shareBtn){
 
-      "click",
+      shareBtn.addEventListener(
 
-      async () => {
+        "click",
 
-        const likeCount =
+        async () => {
 
-          parseInt(
+          const result =
 
-            likeBtn.querySelector(
-              "span"
-            ).innerText
-
-          );
-
-
-        const newLikes =
-
-          await likePost(
-
-            post.id,
-
-            likeCount
-
-          );
-
-
-        if(newLikes !== false){
-
-
-          // UPDATE UI
-
-          likeBtn.querySelector(
-            "span"
-          ).innerText = newLikes;
-
-
-          // ANIMATION
-
-          likeBtn.classList.add(
-            "liked"
-          );
-
-
-          setTimeout(() => {
-
-            likeBtn.classList.remove(
-              "liked"
+            await sharePost(
+              post.id
             );
 
-          },300);
+
+          if(result === "already_shared"){
+
+            alert(
+              "Already Shared"
+            );
+
+            return;
+
+          }
 
 
-          // NOTIFICATION
+          if(result === "shared"){
 
-          const currentUser =
-            getCurrentUser();
+            const summaryCount =
+
+              postElement.querySelector(
+                ".reaction-right span:last-child"
+              );
 
 
-          if(currentUser){
+            let currentShares = 0;
 
-            await createNotification({
 
-              receiverUid:
-                post.firebase_uid,
+            if(summaryCount){
 
-              senderUid:
-                currentUser.uid,
+              currentShares =
 
-              senderName:
-                currentUser.displayName,
+                parseInt(
 
-              senderAvatar:
-                currentUser.photoURL,
+                  summaryCount.innerText
 
-              type:
-                "like",
+                ) || 0;
 
-              postId:
+            }
+
+
+            const newShares =
+
+              await updateShareCount(
+
                 post.id,
 
-              message:
-                "liked your post ❤️"
+                currentShares
 
-            });
+              );
+
+
+            if(newShares !== false){
+
+              summaryCount.innerText =
+
+                `${newShares} shares`;
+
+
+              shareBtn.classList.add(
+                "liked"
+              );
+
+
+              setTimeout(() => {
+
+                shareBtn.classList.remove(
+                  "liked"
+                );
+
+              },300);
+
+            }
+
+
+            // NOTIFICATION
+
+            const currentUser =
+              getCurrentUser();
+
+
+            if(currentUser){
+
+              await createNotification({
+
+                receiverUid:
+                  post.firebase_uid,
+
+                senderUid:
+                  currentUser.uid,
+
+                senderName:
+                  currentUser.displayName,
+
+                senderAvatar:
+                  currentUser.photoURL,
+
+                type:
+                  "share",
+
+                postId:
+                  post.id,
+
+                message:
+                  "shared your post 🚀"
+
+              });
+
+            }
 
           }
 
         }
 
-      }
-
-    );
-
-// SHARE BUTTON
-
-const shareBtn =
-
-  postElement.querySelector(
-    ".share-btn"
-  );
-
-
-shareBtn.addEventListener(
-
-  "click",
-
-  async () => {
-
-    const result =
-
-      await sharePost(
-        post.id
       );
 
-
-    if(result === "already_shared"){
-
-      alert(
-        "Already Shared"
-      );
-
-      return;
-
     }
-
-
-    if(result === "shared"){
-
-      const shareCount =
-
-        parseInt(
-
-          shareBtn.querySelector(
-            "span"
-          ).innerText
-
-        );
-
-
-      const newShares =
-
-        await updateShareCount(
-
-          post.id,
-
-          shareCount
-
-        );
-
-
-      if(newShares !== false){
-
-        shareBtn.querySelector(
-          "span"
-        ).innerText = newShares;
-
-
-        // SHARE ANIMATION
-
-        shareBtn.classList.add(
-          "liked"
-        );
-
-
-        setTimeout(() => {
-
-          shareBtn.classList.remove(
-            "liked"
-          );
-
-        },300);
-
-      }
-
-    }
-
-  }
-
-);
-
-
 
 
     // IMAGE VIEWER
@@ -677,9 +831,11 @@ shareBtn.addEventListener(
 
     }
 
-// RENDER SVG ICONS
 
-lucide.createIcons();
+    // RENDER SVG ICONS
+
+    lucide.createIcons();
+
 
     // APPEND
 
@@ -687,6 +843,6 @@ lucide.createIcons();
       postElement
     );
 
-  });
+  }
 
 }

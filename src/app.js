@@ -1,3 +1,8 @@
+import { startRealtimeReactions }
+
+from "./reactions/realtimeReactions.js";
+
+
 import { startRealtimeNotifications }
 
 from "./notifications/realtimeNotifications.js";
@@ -478,6 +483,19 @@ watchAuthState(
 // INITIAL FEED
 
 initFeed(true);
+
+
+// REALTIME REACTIONS
+
+startRealtimeReactions({
+
+  onReaction: async () => {
+
+    await initFeed(true);
+
+  }
+
+});
 
 
 // REALTIME FEED

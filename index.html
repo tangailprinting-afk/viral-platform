@@ -1,44 +1,94 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>Viral Platform</title>
 
-  <link rel="stylesheet" href="css/style.css" />
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  />
+
 </head>
+
 <body>
 
   <div class="app">
 
-    <h1>বাংলা Viral Platform</h1>
+    <!-- HEADER -->
 
-    <p>
-      Launch Coming Soon...
-    </p>
+    <header class="header">
+
+      <div class="logo">
+        Viral
+      </div>
+
+      <div class="header-icons">
+        🔔
+      </div>
+
+    </header>
+
+    <!-- FEED -->
+
+    <main class="feed">
+
+      <!-- CREATE POST -->
+
+      <div class="create-post">
+
+        <textarea
+          id="postInput"
+          placeholder="কি ভাবছেন?"
+        ></textarea>
+
+        <button id="postBtn">
+          পোস্ট করুন
+        </button>
+
+      </div>
+
+      <!-- POSTS -->
+
+      <div id="feed"></div>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+
+    <nav class="bottom-nav">
+
+      <button>🏠</button>
+
+      <button>🔍</button>
+
+      <button class="add-btn">
+        ➕
+      </button>
+
+      <button>🔥</button>
+
+      <button>👤</button>
+
+    </nav>
 
   </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-<script src="js/app.js"></script>
+  <!-- APP -->
+
+  <script src="js/app.js"></script>
+
 </body>
+
 </html>

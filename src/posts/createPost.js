@@ -6,6 +6,10 @@ import { uploadImage }
 
 from "../api/cloudinary.js";
 
+import { getCurrentUser }
+
+from "../auth/session.js";
+
 
 export async function createPost({
 
@@ -16,6 +20,25 @@ export async function createPost({
 }){
 
   try{
+
+    // CURRENT USER
+
+    const currentUser =
+      getCurrentUser();
+
+
+    // LOGIN REQUIRED
+
+    if(!currentUser){
+
+      alert(
+        "Login Required"
+      );
+
+      return false;
+
+    }
+
 
     let imageUrl = "";
 
@@ -41,8 +64,23 @@ export async function createPost({
       .insert([
 
         {
+
           content:text,
-          image_url:imageUrl
+
+          image_url:imageUrl,
+
+
+          // CREATOR DATA
+
+          firebase_uid:
+            currentUser.uid,
+
+          username:
+            currentUser.displayName,
+
+          avatar:
+            currentUser.photoURL
+
         }
 
       ]);

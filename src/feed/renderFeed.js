@@ -16,13 +16,24 @@ export function renderFeed({
 
         <div class="post-top">
 
-          <div class="avatar"></div>
+         
+<img
+  class="avatar"
+  src="${
+    post.avatar
+    ||
+    'https://placehold.co/100'
+  }"
+/>
+
+
+
 
           <div class="post-user">
 
-            <h3>
-              বাংলা Creator
-            </h3>
+         <h3>
+  ${post.username || "Creator"}
+</h3>
 
             <span>
               Live

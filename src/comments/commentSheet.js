@@ -1,3 +1,8 @@
+
+import { startRealtimeComments }
+
+from "./realtimeComments.js";
+
 import { addComment }
 
 from "./addComment.js";
@@ -169,6 +174,28 @@ export async function openCommentSheet({
   document.body.appendChild(
     sheet
   );
+
+
+// REALTIME COMMENTS
+
+startRealtimeComments({
+
+  postId,
+
+  onNewComment: () => {
+
+    openCommentSheet({
+
+      postId
+
+    });
+
+  }
+
+});
+
+
+
 
 
   // CLOSE

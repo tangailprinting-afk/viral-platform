@@ -1,3 +1,7 @@
+import { openCommentSheet }
+
+from "../comments/commentSheet.js";
+
 import { openImageViewer }
 
 from "../images/imageViewer.js";
@@ -136,11 +140,13 @@ export function renderFeed({
   </button>
 
 
-  <button class="action-btn">
+<button
+  class="action-btn comment-btn"
+>
 
-    💬 Comment
+  💬 Comment
 
-  </button>
+</button>
 
 
   <button class="action-btn">
@@ -192,6 +198,40 @@ export function renderFeed({
       }
 
     );
+
+
+
+// COMMENT BUTTON
+
+const commentBtn =
+
+  postElement.querySelector(
+    ".comment-btn"
+  );
+
+
+commentBtn.addEventListener(
+
+  "click",
+
+  () => {
+
+    openCommentSheet({
+
+      postId:
+        post.id
+
+    });
+
+  }
+
+);
+
+
+
+
+
+
 
 
 

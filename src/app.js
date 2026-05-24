@@ -22,6 +22,10 @@ import { watchAuthState }
 
 from "./auth/session.js";
 
+import { syncUser }
+
+from "./auth/syncUser.js";
+
 
 // APP ROOT
 
@@ -140,23 +144,32 @@ loginBtn.addEventListener(
 
 // AUTH STATE
 
-watchAuthState(user => {
+watchAuthState(
 
-  if(user){
+  async user => {
 
-    loginBtn.innerText =
-      user.displayName;
+    if(user){
+
+      loginBtn.innerText =
+        user.displayName;
+
+
+      // SYNC USER
+
+      await syncUser(user);
+
+    }
+
+    else{
+
+      loginBtn.innerText =
+        "Login";
+
+    }
 
   }
 
-  else{
-
-    loginBtn.innerText =
-      "Login";
-
-  }
-
-});
+);
 
 
 // INITIAL FEED

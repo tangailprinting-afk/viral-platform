@@ -156,6 +156,9 @@ watchAuthState(
 
       // SYNC USER
 
+      console.log(
+  "CALLING SYNC USER"
+);
       await syncUser(user);
 
     }

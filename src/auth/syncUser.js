@@ -3,19 +3,30 @@ import { supabaseClient }
 from "../api/supabase.js";
 
 
-export async function syncUser(
+console.log(
+  "SYNC MODULE LOADED"
+);
 
-  user
 
-){
+export async function syncUser(user){
+
+  console.log(
+    "SYNC USER STARTED"
+  );
 
   try{
 
     // CHECK EXISTING USER
 
-    const { data:existingUser }
+    const {
 
-      = await supabaseClient
+      data: existingUser,
+
+      error: existingError
+
+    }
+
+    = await supabaseClient
 
       .from("users")
 
@@ -29,7 +40,18 @@ export async function syncUser(
 
       )
 
-      .single();
+      .maybeSingle();
+
+
+    console.log(
+      "EXISTING USER:",
+      existingUser
+    );
+
+    console.log(
+      "EXISTING USER ERROR:",
+      existingError
+    );
 
 
     // USER EXISTS
@@ -37,9 +59,7 @@ export async function syncUser(
     if(existingUser){
 
       console.log(
-
         "User Already Exists"
-
       );
 
       return existingUser;
@@ -47,7 +67,7 @@ export async function syncUser(
     }
 
 
-    // CREATE NEW USER
+    // CREATE USERNAME
 
     const username =
 
@@ -56,9 +76,17 @@ export async function syncUser(
       "Creator";
 
 
-    const { data,error }
+    // CREATE NEW USER
 
-      = await supabaseClient
+    const {
+
+      data,
+
+      error
+
+    }
+
+    = await supabaseClient
 
       .from("users")
 
@@ -87,9 +115,18 @@ export async function syncUser(
       .single();
 
 
+    // INSERT ERROR
+
     if(error){
 
-      console.log(error);
+      console.error(
+        "USER INSERT ERROR:",
+        error
+      );
+
+      alert(
+        JSON.stringify(error)
+      );
 
       return null;
 
@@ -97,11 +134,8 @@ export async function syncUser(
 
 
     console.log(
-
-      "New User Created",
-
+      "NEW USER CREATED:",
       data
-
     );
 
     return data;
@@ -110,7 +144,10 @@ export async function syncUser(
 
   catch(err){
 
-    console.log(err);
+    console.error(
+      "SYNC USER CATCH ERROR:",
+      err
+    );
 
     return null;
 

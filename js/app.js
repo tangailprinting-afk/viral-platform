@@ -108,6 +108,32 @@ function renderPosts(posts){
           ${post.content}
         </div>
 
+        <div class="post-actions">
+
+          <button
+            onclick="likePost(${post.id}, this)"
+          >
+            ❤️ ${post.likes_count}
+          </button>
+
+        </div>
+
+        <div class="comment-box">
+
+          <input
+            id="comment-input-${post.id}"
+            type="text"
+            placeholder="কমেন্ট লিখুন..."
+          />
+
+          <button
+            onclick="addComment(${post.id})"
+          >
+            পাঠান
+          </button>
+
+        </div>
+
       </div>
 
     `;
@@ -117,4 +143,113 @@ function renderPosts(posts){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 loadPosts();
+
+async function likePost(id,btn){
+
+  // INSTANT UI UPDATE
+
+  let current =
+    parseInt(
+      btn.innerText.replace(/\D/g,'')
+    );
+
+  current++;
+
+  btn.innerHTML =
+    `❤️ ${current}`;
+
+
+  // DATABASE UPDATE
+
+  const { data } =
+    await client
+    .from("posts")
+    .select("likes_count")
+    .eq("id",id)
+    .single();
+
+  let likes =
+    data.likes_count + 1;
+
+  await client
+    .from("posts")
+    .update({
+      likes_count:likes
+    })
+    .eq("id",id);
+
+}
+async function addComment(postId){
+
+  const input =
+    document.getElementById(
+      `comment-input-${postId}`
+    );
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  const { error } =
+    await client
+    .from("comments")
+    .insert([
+      {
+        post_id:postId,
+        comment:text
+      }
+    ]);
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  input.value = "";
+
+  alert("কমেন্ট হয়েছে 🔥");
+
+}
+client
+.channel("posts-channel")
+
+.on(
+  "postgres_changes",
+  {
+    event:"INSERT",
+    schema:"public",
+    table:"posts"
+  },
+
+  payload => {
+
+    console.log(
+      "NEW POST",
+      payload
+    );
+
+    loadPosts();
+
+  }
+
+)
+
+.subscribe();

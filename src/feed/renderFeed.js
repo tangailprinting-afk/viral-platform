@@ -26,8 +26,12 @@ export function renderFeed({
 
     postElement.innerHTML = `
 
+      <!-- POST TOP -->
+
       <div class="post-top">
 
+
+        <!-- AVATAR -->
 
         <img
 
@@ -41,6 +45,8 @@ export function renderFeed({
 
         />
 
+
+        <!-- USER -->
 
         <div class="post-user">
 
@@ -66,6 +72,8 @@ export function renderFeed({
       </div>
 
 
+      <!-- CONTENT -->
+
       <div class="post-content">
 
         ${
@@ -76,6 +84,8 @@ export function renderFeed({
 
       </div>
 
+
+      <!-- IMAGE -->
 
       ${
         post.image_url
@@ -89,6 +99,41 @@ export function renderFeed({
         :
         ""
       }
+
+
+      <!-- ACTIONS -->
+
+      <div class="post-actions">
+
+
+        <button class="action-btn">
+
+          ❤️ Like
+
+        </button>
+
+
+        <button class="action-btn">
+
+          💬 Comment
+
+        </button>
+
+
+        <button class="action-btn">
+
+          🚀 Boost
+
+        </button>
+
+
+        <button class="action-btn">
+
+          🔖 Save
+
+        </button>
+
+      </div>
 
     `;
 

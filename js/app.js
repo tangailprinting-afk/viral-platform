@@ -19,7 +19,10 @@ const postInput =
 
 const feed =
   document.getElementById("feed");
-
+const imageInput =
+  document.getElementById(
+    "imageInput"
+  );
 
 // CREATE POST
 
@@ -30,27 +33,80 @@ postBtn.addEventListener(
     const text =
       postInput.value.trim();
 
-    if(!text){
+    const file =
+      imageInput.files[0];
+
+    if(!text && !file){
+
       alert("কিছু লিখুন");
+
       return;
+
     }
+
+    let imageUrl = "";
+
+
+    // IMAGE UPLOAD
+
+    if(file){
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "file",
+        file
+      );
+
+      formData.append(
+        "upload_preset",
+        "viral_posts"
+      );
+
+      const response =
+        await fetch(
+          "https://api.cloudinary.com/v1_1/dkrsjdmr9/image/upload",
+          {
+            method:"POST",
+            body:formData
+          }
+        );
+
+      const data =
+        await response.json();
+
+      imageUrl =
+        data.secure_url;
+
+    }
+
+
+    // SAVE POST
 
     const { error } =
       await client
       .from("posts")
       .insert([
         {
-          content:text
+          content:text,
+          image_url:imageUrl
         }
       ]);
 
     if(error){
+
       console.log(error);
+
       alert("Post Failed");
+
       return;
+
     }
 
     postInput.value = "";
+
+    imageInput.value = "";
 
     loadPosts();
 
@@ -104,9 +160,22 @@ function renderPosts(posts){
 
         </div>
 
-        <div class="post-content">
-          ${post.content}
-        </div>
+       <div class="post-content">
+  ${post.content || ""}
+</div>
+
+${
+  post.image_url
+  ?
+  `
+    <img
+      class="post-image"
+      src="${post.image_url}"
+    />
+  `
+  :
+  ""
+}
 
         <div class="post-actions">
 
@@ -243,6 +312,31 @@ client
 
     console.log(
       "NEW POST",
+      payload
+    );
+
+    loadPosts();
+
+  }
+
+)
+
+.subscribe();
+const channel = client
+.channel("realtime-posts")
+
+.on(
+  "postgres_changes",
+  {
+    event:"INSERT",
+    schema:"public",
+    table:"posts"
+  },
+
+  payload => {
+
+    console.log(
+      "Realtime New Post",
       payload
     );
 

@@ -1,3 +1,8 @@
+import { openProfile }
+
+from "../users/profile.js";
+
+
 export function renderFeed({
 
   posts,
@@ -8,65 +13,123 @@ export function renderFeed({
 
   container.innerHTML = "";
 
+
   posts.forEach(post => {
 
-    container.innerHTML += `
-
-      <div class="post-card">
-
-        <div class="post-top">
-
-         
-<img
-  class="avatar"
-  src="${
-    post.avatar
-    ||
-    'https://placehold.co/100'
-  }"
-/>
+    const postElement =
+      document.createElement("div");
 
 
+    postElement.className =
+      "post-card";
 
 
-          <div class="post-user">
+    postElement.innerHTML = `
 
-         <h3>
-  ${post.username || "Creator"}
-</h3>
+      <div class="post-top">
 
-            <span>
-              Live
-            </span>
 
-          </div>
+        <img
+
+          class="avatar"
+
+          src="${
+            post.avatar
+            ||
+            'https://placehold.co/100'
+          }"
+
+        />
+
+
+        <div class="post-user">
+
+          <h3>
+
+            ${
+              post.username
+              ||
+              "Creator"
+            }
+
+          </h3>
+
+
+          <span>
+
+            🔥 Live Creator
+
+          </span>
 
         </div>
 
+      </div>
 
-        <div class="post-content">
 
-          ${post.content || ""}
-
-        </div>
-
+      <div class="post-content">
 
         ${
-          post.image_url
-          ?
-          `
-            <img
-              class="post-image"
-              src="${post.image_url}"
-            />
-          `
-          :
+          post.content
+          ||
           ""
         }
 
       </div>
 
+
+      ${
+        post.image_url
+        ?
+        `
+          <img
+            class="post-image"
+            src="${post.image_url}"
+          />
+        `
+        :
+        ""
+      }
+
     `;
+
+
+    // OPEN PROFILE
+
+    const topSection =
+
+      postElement.querySelector(
+        ".post-top"
+      );
+
+
+    topSection.addEventListener(
+
+      "click",
+
+      () => {
+
+        openProfile({
+
+          user:{
+
+            username:
+              post.username,
+
+            avatar:
+              post.avatar
+
+          }
+
+        });
+
+      }
+
+    );
+
+
+    container.appendChild(
+      postElement
+    );
 
   });
 

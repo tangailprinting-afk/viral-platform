@@ -1,0 +1,307 @@
+.profile-modal{
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.85);
+
+  z-index:9999;
+
+  overflow-y:auto;
+
+  backdrop-filter:blur(10px);
+
+}
+
+
+.profile-content{
+
+  min-height:100vh;
+
+  background:#0f0f0f;
+
+}
+
+
+/* HERO */
+
+.profile-hero{
+
+  position:relative;
+
+  height:240px;
+
+  background:
+
+  linear-gradient(
+
+    135deg,
+
+    #ff004f,
+
+    #6a00ff
+
+  );
+
+  overflow:hidden;
+
+}
+
+
+.profile-hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+
+  radial-gradient(
+
+    circle at top right,
+
+    rgba(255,255,255,.25),
+
+    transparent 40%
+
+  );
+
+}
+
+
+/* CLOSE */
+
+.close-profile{
+
+  position:absolute;
+
+  top:20px;
+
+  right:20px;
+
+  width:42px;
+
+  height:42px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.4);
+
+  color:white;
+
+  font-size:18px;
+
+  z-index:10;
+
+}
+
+
+/* AVATAR */
+
+.profile-avatar-wrapper{
+
+  position:absolute;
+
+  bottom:-60px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+}
+
+
+.profile-avatar{
+
+  width:130px;
+
+  height:130px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  border:5px solid #0f0f0f;
+
+  box-shadow:
+
+    0 0 30px #ff00c8,
+
+    0 0 60px rgba(255,0,200,.5);
+
+}
+
+
+/* VERIFIED */
+
+.verified-badge{
+
+  position:absolute;
+
+  right:5px;
+
+  bottom:10px;
+
+  width:32px;
+
+  height:32px;
+
+  border-radius:50%;
+
+  background:#0095ff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:white;
+
+  font-size:15px;
+
+  border:3px solid #0f0f0f;
+
+}
+
+
+/* INFO */
+
+.profile-info{
+
+  padding-top:80px;
+
+  text-align:center;
+
+}
+
+
+.profile-name{
+
+  font-size:28px;
+
+  font-weight:700;
+
+}
+
+
+.creator-level{
+
+  margin-top:8px;
+
+  color:#ffcc00;
+
+  font-weight:bold;
+
+}
+
+
+.creator-rank{
+
+  margin-top:8px;
+
+  color:#aaa;
+
+}
+
+
+/* STATS */
+
+.profile-stats{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+
+  padding:25px;
+
+}
+
+
+.stat-card{
+
+  background:#1a1a1a;
+
+  border-radius:18px;
+
+  padding:20px 10px;
+
+  text-align:center;
+
+  border:1px solid #2a2a2a;
+
+}
+
+
+.stat-card strong{
+
+  display:block;
+
+  font-size:22px;
+
+}
+
+
+.stat-card span{
+
+  color:#aaa;
+
+  font-size:13px;
+
+}
+
+
+/* TABS */
+
+.profile-tabs{
+
+  display:flex;
+
+  overflow:auto;
+
+  gap:10px;
+
+  padding:0 20px 20px;
+
+}
+
+
+.profile-tabs button{
+
+  border:none;
+
+  background:#1a1a1a;
+
+  color:white;
+
+  padding:12px 18px;
+
+  border-radius:14px;
+
+  white-space:nowrap;
+
+}
+
+
+.profile-tabs .active{
+
+  background:#ff004f;
+
+}
+
+
+/* POSTS */
+
+.profile-posts{
+
+  padding:0 20px 100px;
+
+}

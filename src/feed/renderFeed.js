@@ -1,3 +1,7 @@
+import { openImageViewer }
+
+from "../images/imageViewer.js";
+
 import { likePost }
 
 from "../reactions/likes.js";
@@ -256,6 +260,35 @@ likeBtn.addEventListener(
   }
 
 );
+
+
+
+// IMAGE VIEWER
+
+const postImage =
+
+  postElement.querySelector(
+    ".post-image"
+  );
+
+
+if(postImage){
+
+  postImage.addEventListener(
+
+    "click",
+
+    () => {
+
+      openImageViewer(
+        post.image_url
+      );
+
+    }
+
+  );
+
+}
 
     container.appendChild(
       postElement

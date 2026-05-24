@@ -1,3 +1,11 @@
+import { createNotification }
+
+from "../notifications/createNotification.js";
+
+import { getCurrentUser }
+
+from "../auth/session.js";
+
 import { openCommentSheet }
 
 from "../comments/commentSheet.js";
@@ -9,7 +17,6 @@ from "../images/imageViewer.js";
 import { likePost }
 
 from "../reactions/likes.js";
-
 
 import { openProfile }
 
@@ -116,57 +123,68 @@ export function renderFeed({
 
       <!-- ACTIONS -->
 
-<!-- ACTIONS -->
-
-<div class="post-actions">
+      <div class="post-actions">
 
 
-  <button
-    class="action-btn like-btn"
-  >
+        <!-- LIKE -->
 
-    ❤️
+        <button
+          class="action-btn like-btn"
+        >
 
-    <span>
+          ❤️
 
-      ${
-        post.likes
-        ||
-        0
-      }
+          <span>
 
-    </span>
+            ${
+              post.likes
+              ||
+              0
+            }
 
-  </button>
+          </span>
 
-
-<button
-  class="action-btn comment-btn"
->
-
-  💬 Comment
-
-</button>
+        </button>
 
 
-  <button class="action-btn">
+        <!-- COMMENT -->
 
-    🚀 Boost
+        <button
+          class="action-btn comment-btn"
+        >
 
-  </button>
+          💬 Comment
+
+        </button>
 
 
-  <button class="action-btn">
+        <!-- BOOST -->
 
-    🔖 Save
+        <button
+          class="action-btn"
+        >
 
-  </button>
+          🚀 Boost
 
-</div>
+        </button>
+
+
+        <!-- SAVE -->
+
+        <button
+          class="action-btn"
+        >
+
+          🔖 Save
+
+        </button>
+
+      </div>
+
     `;
 
 
-    // OPEN PROFILE
+    // PROFILE OPEN
 
     const topSection =
 
@@ -200,135 +218,167 @@ export function renderFeed({
     );
 
 
+    // COMMENT BUTTON
 
-// COMMENT BUTTON
+    const commentBtn =
 
-const commentBtn =
-
-  postElement.querySelector(
-    ".comment-btn"
-  );
-
-
-commentBtn.addEventListener(
-
-  "click",
-
-  () => {
-
-    openCommentSheet({
-
-      postId:
-        post.id
-
-    });
-
-  }
-
-);
-
-
-
-
-
-
-
-
-
-
-// LIKE BUTTON
-
-const likeBtn =
-
-  postElement.querySelector(
-    ".like-btn"
-  );
-
-
-likeBtn.addEventListener(
-
-  "click",
-
-  async () => {
-
-    const likeCount =
-
-      parseInt(
-
-        likeBtn.querySelector(
-          "span"
-        ).innerText
-
+      postElement.querySelector(
+        ".comment-btn"
       );
 
 
-    const newLikes =
+    commentBtn.addEventListener(
 
-      await likePost(
+      "click",
 
-        post.id,
+      () => {
 
-        likeCount
+        openCommentSheet({
 
+          postId:
+            post.id
+
+        });
+
+      }
+
+    );
+
+
+    // LIKE BUTTON
+
+    const likeBtn =
+
+      postElement.querySelector(
+        ".like-btn"
       );
 
 
-    if(newLikes !== false){
+    likeBtn.addEventListener(
 
-      likeBtn.querySelector(
-        "span"
-      ).innerText = newLikes;
+      "click",
+
+      async () => {
+
+        const likeCount =
+
+          parseInt(
+
+            likeBtn.querySelector(
+              "span"
+            ).innerText
+
+          );
 
 
-      // ANIMATION
+        const newLikes =
 
-      likeBtn.classList.add(
-        "liked"
+          await likePost(
+
+            post.id,
+
+            likeCount
+
+          );
+
+
+        if(newLikes !== false){
+
+
+          // UPDATE UI
+
+          likeBtn.querySelector(
+            "span"
+          ).innerText = newLikes;
+
+
+          // ANIMATION
+
+          likeBtn.classList.add(
+            "liked"
+          );
+
+
+          setTimeout(() => {
+
+            likeBtn.classList.remove(
+              "liked"
+            );
+
+          },300);
+
+
+          // NOTIFICATION
+
+          const currentUser =
+            getCurrentUser();
+
+
+          if(currentUser){
+
+            await createNotification({
+
+              receiverUid:
+                post.firebase_uid,
+
+              senderUid:
+                currentUser.uid,
+
+              senderName:
+                currentUser.displayName,
+
+              senderAvatar:
+                currentUser.photoURL,
+
+              type:
+                "like",
+
+              postId:
+                post.id,
+
+              message:
+                "liked your post ❤️"
+
+            });
+
+          }
+
+        }
+
+      }
+
+    );
+
+
+    // IMAGE VIEWER
+
+    const postImage =
+
+      postElement.querySelector(
+        ".post-image"
       );
 
 
-      setTimeout(() => {
+    if(postImage){
 
-        likeBtn.classList.remove(
-          "liked"
-        );
+      postImage.addEventListener(
 
-      },300);
+        "click",
+
+        () => {
+
+          openImageViewer(
+            post.image_url
+          );
+
+        }
+
+      );
 
     }
 
-  }
 
-);
-
-
-
-// IMAGE VIEWER
-
-const postImage =
-
-  postElement.querySelector(
-    ".post-image"
-  );
-
-
-if(postImage){
-
-  postImage.addEventListener(
-
-    "click",
-
-    () => {
-
-      openImageViewer(
-        post.image_url
-      );
-
-    }
-
-  );
-
-}
+    // APPEND
 
     container.appendChild(
       postElement

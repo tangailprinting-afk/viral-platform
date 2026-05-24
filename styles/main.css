@@ -1042,3 +1042,32 @@
   }
 
 }
+
+/* ======================
+   SVG ICONS
+====================== */
+
+.left-sidebar button,
+
+.bottom-nav button{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+
+.left-sidebar svg,
+
+.bottom-nav svg{
+
+  width:24px;
+
+  height:24px;
+
+  stroke-width:2.2;
+
+}

@@ -11,7 +11,10 @@ export async function loadFeed(){
 
     .from("posts")
 
-    .select("*")
+    .select(`
+  *,
+  firebase_uid
+`)
 
     .order(
       "created_at",

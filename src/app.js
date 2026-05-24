@@ -2,7 +2,6 @@ import { openNotificationPanel }
 
 from "./notifications/notificationPanel.js";
 
-
 import { createPost }
 
 from "./posts/createPost.js";
@@ -44,9 +43,11 @@ app.innerHTML = `
 
   <div class="app">
 
+
     <!-- HEADER -->
 
     <header class="header">
+
 
       <div class="logo">
 
@@ -77,19 +78,40 @@ app.innerHTML = `
 
       <aside class="left-sidebar">
 
-        <button>🏠</button>
 
-        <button>🔥</button>
+        <button>
+
+          <i data-lucide="house"></i>
+
+        </button>
+
+
+        <button>
+
+          <i data-lucide="flame"></i>
+
+        </button>
+
 
         <button class="notification-btn">
 
-  🔔
+          <i data-lucide="bell"></i>
 
-</button>
+        </button>
 
-        <button>💬</button>
 
-        <button>👤</button>
+        <button>
+
+          <i data-lucide="messages-square"></i>
+
+        </button>
+
+
+        <button>
+
+          <i data-lucide="user"></i>
+
+        </button>
 
       </aside>
 
@@ -102,6 +124,7 @@ app.innerHTML = `
         <!-- CREATE POST -->
 
         <div class="create-post">
+
 
           <textarea
             id="postInput"
@@ -198,25 +221,51 @@ app.innerHTML = `
 
     <nav class="bottom-nav">
 
-      <button>🏠</button>
 
-      <button>🔍</button>
+      <button>
 
-      <button class="add-btn">
-
-        ➕
+        <i data-lucide="house"></i>
 
       </button>
 
-      <button>🔥</button>
 
-      <button>👤</button>
+      <button>
+
+        <i data-lucide="search"></i>
+
+      </button>
+
+
+      <button class="add-btn">
+
+        <i data-lucide="plus"></i>
+
+      </button>
+
+
+      <button class="notification-btn">
+
+        <i data-lucide="bell"></i>
+
+      </button>
+
+
+      <button>
+
+        <i data-lucide="user"></i>
+
+      </button>
 
     </nav>
 
   </div>
 
 `;
+
+
+// ACTIVATE SVG ICONS
+
+lucide.createIcons();
 
 
 // ELEMENTS
@@ -235,27 +284,35 @@ const feedContainer =
 
 const loginBtn =
   document.getElementById("loginBtn");
-const notificationBtn =
 
-  document.querySelector(
+
+// ALL NOTIFICATION BUTTONS
+
+const notificationButtons =
+
+  document.querySelectorAll(
     ".notification-btn"
   );
 
 
+// NOTIFICATION EVENTS
 
-  // NOTIFICATIONS
+notificationButtons.forEach(btn => {
 
-notificationBtn.addEventListener(
+  btn.addEventListener(
 
-  "click",
+    "click",
 
-  () => {
+    () => {
 
-    openNotificationPanel();
+      openNotificationPanel();
 
-  }
+    }
 
-);
+  );
+
+});
+
 
 // LOGIN
 
@@ -287,6 +344,7 @@ watchAuthState(
       console.log(
         "CALLING SYNC USER"
       );
+
 
       await syncUser(user);
 
